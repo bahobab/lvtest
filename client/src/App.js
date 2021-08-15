@@ -31,6 +31,7 @@ function App() {
 
 function SelectName ({names}) {
   const [selectedValue, setSelectedValue] = useState({});
+  const [charDetails, setCharDetails] = useState({});
 
   const options = names.map(name => ({value: name, label: name}));
 
@@ -38,12 +39,22 @@ function SelectName ({names}) {
     setSelectedValue(value);
   };
 
+  const handleClick = async () => {
+    const resp = await axios.get(`${NAME_URL}${selectedValue.value}`);
+    // console.log(resp.data);
+    setCharDetails(resp.data[0]);
+
+  };
+
   return (
     <div>
       <h3>Select A Name to View Details</h3>
       {/* <pre>{JSON.stringify(names)}</pre> */}
       <Select options={options} value={selectedValue} onChange={handleChange}/>
-
+      <button onClick={handleClick}>View Details</button>
+      <div>
+        <pre>{JSON.stringify(charDetails)}</pre>
+      </div>
     </div>
   );
 }
