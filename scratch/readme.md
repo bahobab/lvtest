@@ -5,18 +5,17 @@
 BaseUrl: https://swapi.dev/api/
 - Endpoints:
 	- all SWAPI actors name
-	/
+	/characters
 	
-	call BaseUrl + req.path + '?search=?'
-
-	>create helper function to compile users
 	
 	return JSON [{"name":"polo","url":"https://swapi.dev/api/people/1"},...]
 
 	
 	- actor details
-	/:name
+	characters/:name
 
 	call BaseUrl + '?search' + req.params[name]
 
-	
+- 404
+
+** cors issue
