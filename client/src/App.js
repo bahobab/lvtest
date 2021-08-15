@@ -53,10 +53,44 @@ function SelectName ({names}) {
       <Select options={options} value={selectedValue} onChange={handleChange}/>
       <button onClick={handleClick}>View Details</button>
       <div>
-        <pre>{JSON.stringify(charDetails)}</pre>
+        {/* <pre>{JSON.stringify(charDetails)}</pre> */}
+        <ShowDetails characterDetails={charDetails}/>
       </div>
     </div>
   );
 }
 
+function ShowDetails({characterDetails}) {
+  const {
+    name,
+    height,
+    mass,
+    hair_color,
+    eye_color,
+    skin_color,
+    birth_year,
+    gender
+  } = characterDetails;
+
+  return (
+    <>
+      {/* <pre>{JSON.stringify(character)}</pre> */}
+      <h3>Details for <span>{name}</span></h3>
+      <pre>
+        {
+          JSON.stringify({
+          name,
+          height,
+          mass,
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          gender
+        })
+      }
+      </pre>
+    </>
+  );
+}
 export default App;
