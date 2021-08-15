@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Select from 'react-select';
 import axios from 'axios';
 
 import './App.css';
@@ -22,7 +23,27 @@ function App() {
   return (
     <div className="App">
       <h1>SWAPI Exercise</h1>
-      <pre>{JSON.stringify(names)}</pre>
+      {/* <pre>{JSON.stringify(names)}</pre> */}
+      <SelectName names={names}/>
+    </div>
+  );
+}
+
+function SelectName ({names}) {
+  const [selectedValue, setSelectedValue] = useState({});
+
+  const options = names.map(name => ({value: name, label: name}));
+
+  const handleChange = (value) => {
+    setSelectedValue(value);
+  };
+
+  return (
+    <div>
+      <h3>Select A Name to View Details</h3>
+      {/* <pre>{JSON.stringify(names)}</pre> */}
+      <Select options={options} value={selectedValue} onChange={handleChange}/>
+
     </div>
   );
 }
