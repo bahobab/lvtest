@@ -11,11 +11,28 @@ app.use(express.json());
 
 const BASE_URL = ' https://swapi.dev/api/people/';
 
-app.get('/characters', async (req, res) => {
-  const resp = await axios.get(BASE_URL);
+async function getAllObjects(url, apiObjects = []) {
+  // recursuve call to fetch page after page
 
-  // console.log(resp.data.results);
-  const names = resp.data.results.map(character => character.name)
+  if (url === null) {
+    return apiObjects;
+  }
+
+  const resp = await axios.get(url);
+  const pageObjects = resp.data.results;
+  apiObjects = [...apiObjects, ...pageObjects];
+  console.log('>>>next', resp.data.next);
+  return getAllObjects(resp.data.next, apiObjects);
+}
+
+app.get('/characters', async (req, res) => {
+  // const resp = await axios.get(BASE_URL);
+  // console.log(resp.data);
+  // const names = resp.data.results.map(character => character.name);
+
+  const allCharacters = await getAllObjects(BASE_URL);
+  // console.log(allCharacters);
+  const names = allCharacters.map(character => character.name);
   res.send(JSON.stringify(names));
 }); 
 

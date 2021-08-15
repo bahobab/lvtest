@@ -19,3 +19,14 @@ BaseUrl: https://swapi.dev/api/
 - 404
 
 ** cors issue
+
+2. Client
+
+- Select component: use async?
+- user details:
+	pull requested properties
+
+- loading state:
+	- Selectcomponent
+  console.log('>>', characterDetails);
+	- details
