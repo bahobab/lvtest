@@ -18,7 +18,7 @@ function App() {
   useEffect( () => {
     console.log('app started');
     fetchNames();
-  });
+  }, []);
 
   return (
     <div className="App">
