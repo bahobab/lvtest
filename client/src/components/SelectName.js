@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import ShowDetails from './ShowDetails';
 
+import './SelectName.css';
+
 const PEOPLE_URL = 'http://localhost:4000/people/';
 
 function SelectName ({names, isLoading}) {
@@ -27,11 +29,13 @@ function SelectName ({names, isLoading}) {
   };
 
   return (
-    <div>
+    <div className="selection-wrapper">
       <h3>Select A Name to View Details</h3>
-      <Select options={options} value={selectedValue} isLoading={isLoading} onChange={handleChange}/>
-      <button onClick={handleClick} disabled={selectedValue === undefined }>View Details</button>
-      <div>
+      <div className="selection">
+      <Select className="select-box" options={options} value={selectedValue} isLoading={isLoading} onChange={handleChange}/>
+      <button className="select-button" onClick={handleClick} disabled={selectedValue === undefined }>View Details</button>
+      </div>
+      <div className="details-wrapper">
         {
           fetchingDetails
             ? "Fetching details ..."

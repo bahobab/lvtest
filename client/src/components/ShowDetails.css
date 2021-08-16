@@ -1,0 +1,21 @@
+.character-details {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.character-details h3 {
+  text-align: center;
+}
+
+.details-table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.details-data td, .details-header th {
+  font-size: 15px;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
