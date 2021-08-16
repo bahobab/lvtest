@@ -4,29 +4,55 @@ import axios from 'axios';
 
 import './App.css';
 
-const NAME_URL = 'http://localhost:4000/characters/';
+const PEOPLE_URL = 'http://localhost:4000/people/';
+// const NAME_URL = 'http://localhost:4000/characters/';
 
 function App() {
   const [names, setNames] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchNames = async () => {
-    setIsLoading(true);
-    const resp = await axios.get(NAME_URL);
-    setNames(resp.data);
-    setIsLoading(false);
-    // console.log(resp.data);
-  };
+  // const fetchNames = async () => {
+  //   setIsLoading(true);
+  //   const resp = await axios.get(NAME_URL, {timeout: 60 * 4 * 1000});
+  //   setNames(resp.data);
+  //   setIsLoading(false);
+  //   // console.log(resp.data);
+  // };
+
+  async function getAllObjects(url, apiObjects = []) {
+  // recursuve call to fetch page after page
+
+  if (url === null) {
+    return apiObjects;
+  }
+
+  const resp = await axios.get(url, {timeout: 60 * 1 * 1000});
+  const pageObjects = resp.data.names;
+  apiObjects = [...apiObjects, ...pageObjects];
+
+  setNames(apiObjects);
+  console.log('>>>next', apiObjects);
+  let nextUrl;
+  if (resp.data.next !== null) {
+    const nextPage = resp.data.next.split('page=')[1];
+    nextUrl = `${PEOPLE_URL}${nextPage}`;
+  } else {
+    nextUrl = null;
+  }
+
+  console.log('next url:', nextUrl);
+  return getAllObjects(nextUrl, apiObjects);
+}
 
   useEffect( () => {
     console.log('app started');
-    fetchNames();
+    // fetchNames();
+    getAllObjects(`${PEOPLE_URL}1`);
   }, []);
 
   return (
     <div className="App">
       <h1>SWAPI Exercise</h1>
-      {/* <pre>{JSON.stringify(names)}</pre> */}
       <SelectName isLoading={isLoading} names={names}/>
     </div>
   );
@@ -45,7 +71,7 @@ function SelectName ({names, isLoading}) {
 
   const handleClick = async () => {
     setFetchingDetails(true);
-    const resp = await axios.get(`${NAME_URL}${selectedValue.value}`);
+    const resp = await axios.get(`${PEOPLE_URL}details/${selectedValue.value}`);
     // console.log(resp.data);
     setCharDetails(resp.data[0]);
     setFetchingDetails(false);
@@ -55,11 +81,9 @@ function SelectName ({names, isLoading}) {
   return (
     <div>
       <h3>Select A Name to View Details</h3>
-      {/* <pre>{JSON.stringify(names)}</pre> */}
       <Select options={options} value={selectedValue} isLoading={isLoading} onChange={handleChange}/>
       <button onClick={handleClick} disabled={selectedValue === undefined }>View Details</button>
       <div>
-        {/* <pre>{JSON.stringify(charDetails)}</pre> */}
         {
           fetchingDetails
             ? "Fetching details ..."
@@ -88,7 +112,6 @@ function ShowDetails({characterDetails}) {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(character)}</pre> */}
       <h3>Details for <span>{name}</span></h3>
       <pre>
         {
@@ -107,4 +130,5 @@ function ShowDetails({characterDetails}) {
     </>
   );
 }
+
 export default App;
