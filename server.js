@@ -9,7 +9,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const BASE_URL = ' https://swapi.dev/api/people/';
+const BASE_URL = 'https://swapi.dev/api/people/';
 // https://swapi.dev/api/people/?page=2
 
 app.get('/people/:page', async (req, res) => {
