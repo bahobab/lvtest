@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import Select from 'react-select';
 import axios from 'axios';
+
+import SelectName from './components/SelectName';
 
 import './App.css';
 
@@ -26,6 +27,7 @@ function App() {
     return apiObjects;
   }
 
+  // console.log('>>>Fetching', url);
   const resp = await axios.get(url, {timeout: 60 * 1 * 1000});
   const pageObjects = resp.data.names;
   apiObjects = [...apiObjects, ...pageObjects];
@@ -55,79 +57,6 @@ function App() {
       <h1>SWAPI Exercise</h1>
       <SelectName isLoading={isLoading} names={names}/>
     </div>
-  );
-}
-
-function SelectName ({names, isLoading}) {
-  const options = names.map(name => ({value: name, label: name}));
-  const [selectedValue, setSelectedValue] = useState(options[0]);
-  const [charDetails, setCharDetails] = useState({});
-  const [fetchingDetails, setFetchingDetails] = useState(false);
-
-
-  const handleChange = (value) => {
-    setSelectedValue(value);
-  };
-
-  const handleClick = async () => {
-    setFetchingDetails(true);
-    const resp = await axios.get(`${PEOPLE_URL}details/${selectedValue.value}`);
-    // console.log(resp.data);
-    setCharDetails(resp.data[0]);
-    setFetchingDetails(false);
-
-  };
-
-  return (
-    <div>
-      <h3>Select A Name to View Details</h3>
-      <Select options={options} value={selectedValue} isLoading={isLoading} onChange={handleChange}/>
-      <button onClick={handleClick} disabled={selectedValue === undefined }>View Details</button>
-      <div>
-        {
-          fetchingDetails
-            ? "Fetching details ..."
-            : <ShowDetails characterDetails={charDetails}/>
-        }
-      </div>
-    </div>
-  );
-}
-
-function ShowDetails({characterDetails}) {
-  if (Object.keys(characterDetails).length === 0) {
-    return 'No Details to Show Please select a Character then click the "Show Details" button'
-  }
-
-  const {
-    name,
-    height,
-    mass,
-    hair_color,
-    eye_color,
-    skin_color,
-    birth_year,
-    gender
-  } = characterDetails;
-
-  return (
-    <>
-      <h3>Details for <span>{name}</span></h3>
-      <pre>
-        {
-          JSON.stringify({
-          name,
-          height,
-          mass,
-          hair_color,
-          skin_color,
-          eye_color,
-          birth_year,
-          gender
-        })
-      }
-      </pre>
-    </>
   );
 }
 
